@@ -1,53 +1,31 @@
-#include "vehicle.h"
+#include "stdafx.h"
+#include "Vehicle.h"
+#include "drawable.h"
 
 Vehicle::Vehicle(){
 
 }
 
-Vehicle::Vehicle( int speed, double aggression, int x, int y, int w, int h, string direction){
-    this->speed = speed;
-    this->aggression = aggression;
-    this->x = x;
-    this->y = y;
-    this->w = w;
-    this->h = h;
-    this->direction = direction;
+Vehicle::Vehicle(SDL_Renderer *passed_Renderer, std::string filePath, int speed, double aggression, int x, int y, int w, int h):Drawable(passed_Renderer, filePath, x, y, w, h){
+	this->speed = speed;
+	this->aggression = aggression;
 }
 
 
 void Vehicle::setSpeed(int speed){
-    this->speed = speed;  //keith change speed = speed to this.speed = speed, same for aggression
-}
+	speed = speed;
+}	
 
 void Vehicle::setAggression(double aggression){
-    this->aggression = aggression;
+	aggression = aggression;
 }
 
 int Vehicle::getSpeed(){
-    return speed;
+	return speed;	
 }
 
 double Vehicle::getAggression(){
-    return aggression;
-}
-
-int Vehicle::getx(){
- return x;
+	return aggression;
 }
 
 
-int Vehicle::gety(){
- return y;
-}
-
-
-
-int Vehicle::getw(){
- return w;
-}
-
-
-
-int Vehicle::geth(){
- return h;
-}
