@@ -1,6 +1,7 @@
 #include <vector>
 #include "Behaviour.h"
 #include "Vehicle.h"
+using namespace std;
 
 class Logic {
 
@@ -15,9 +16,12 @@ public:
     vector<Vehicle*> getCars();
     void setCars(vector<Vehicle*> cars);
     vector<Layout*> getRoads();
-    void setRoads(vector<Vehicle*> roads);
-    void scan(Layout *road);
+    void setRoads(vector<Layout*> roads);
+    void scan();
 
    // int recordAverageSpeed(Vehicle vehicle);
 };
+
+
+
 

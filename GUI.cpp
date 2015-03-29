@@ -38,6 +38,7 @@ GUI::GUI(void)
 	vehicles.push_back(car1);
 	vehicles.push_back(car2);
 
+	roads.push_back(road1);
 
 	MainLoop();
 }
@@ -79,7 +80,8 @@ void GUI::MainLoop()
 
 		//logic = new Logic (arguments);
 		while(!quit_Simulation) {
-			//logic->recordAvgSpeed();
+			logic = new Logic(vehicles, roads);
+			logic->scan();
 
 
 			//if(main_Event->type == ) {

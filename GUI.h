@@ -4,6 +4,7 @@
 #include "Drawable.h"
 #include "Vehicle.h"
 #include "Layout.h"
+#include "Logic.h"
 
 class GUI
 {
@@ -35,13 +36,16 @@ private:
 	Layout *road1;
 
 	// need logic object to call the logic control class
-	//Logic *logic;
+	Logic *logic;
 
 	// storage for all our drawable objects, used to itterate through them to draw to the screen
 	std::vector<Drawable*> drawables;
 
 	// storage for all Vehicle object
 	std::vector<Vehicle*> vehicles;
+
+	// storage for all Layout Objects
+	std::vector<Layout*> roads;
 
 };
 

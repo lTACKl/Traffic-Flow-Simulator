@@ -17,8 +17,8 @@ Behaviour::~Behaviour()
 //Distance is measure by car lengths, the y value of a car is 2, later we will see trucks being 10 etc. Adding more complexity for overtake
 bool Behaviour :: scanYourSide(std::vector<Vehicle*> cars , Layout *road , Vehicle * car){ //Iteration 1 Speed up and Slow Down, This method will change throughout iterations to handle overtake
   bool decision = false;
-  int myCarX = car->getx();
-  int myCarY = car->gety();
+  int myCarX = car->GetX();
+  int myCarY = car->GetY();
   int myCarSpeed = car->getSpeed();
   int closestCar = 1000000;
   int theirSpeed;
@@ -26,8 +26,8 @@ bool Behaviour :: scanYourSide(std::vector<Vehicle*> cars , Layout *road , Vehic
   int speedLimit = road->getSpeedLimit();
 
    for(int i=0; i< cars.size(); i++){
-      int theirCarX = cars.at(i)->getx();
-      int theirCarY = cars.at(i)->gety();
+	   int theirCarX = cars.at(i)->GetX();
+	   int theirCarY = cars.at(i)->GetY();
       if(((theirCarX == myCarX) && (theirCarY > myCarY)) && (theirCarY < closestCar)){  //This means The Car is on the same road and they are infront but not directly therefore we must find if it is the car directly infront of you
           theirSpeed =  cars.at(i)->getSpeed();
           closestCar = theirCarY; //at the end of the for loop we will have the closest car as it will be the lowest Y co-ordinate that is bigger than yours
@@ -51,7 +51,7 @@ bool Behaviour :: scanYourSide(std::vector<Vehicle*> cars , Layout *road , Vehic
 void Behaviour::reduceSpeed(Vehicle *car, vector<Layout *> roads){ //Vector of roads to find out the speed limit for the current road
  double driverAggression = car->getAggression();
  int carSpeed = car->getSpeed();
- int carX = car->getx();
+ int carX = car->GetX();
 
  //reduce speed according to car infront of you-----Needs to be done // for now I will decrease it depending on aggression
  int newSpeed = (carSpeed) - (carSpeed/driverAggression/10);  //lower the aggression the more decrease in speed
@@ -62,11 +62,11 @@ void Behaviour::reduceSpeed(Vehicle *car, vector<Layout *> roads){ //Vector of r
 void Behaviour::increaseSpeed(Vehicle *car,vector<Layout *> roads){
   double driverAggression = car->getAggression();
   int carSpeed = car->getSpeed();
-  int carX = car->getx();
+  int carX = car->GetX();
   int speedLimit;
   //Find speed Limit // not needed for slowDown unless we want to take into account the speed that other cars may be going at e.g. Car behind is going 100kmph and you slow down to 40 , the breaking distance may cause the car to rear end you
   for(int i=0; i<roads.size(); i++){
-      int roadPositionX = roads.at(i)->getx();
+      int roadPositionX = roads.at(i)->GetX();
       if(roadPositionX == carX){  //We are on the same X xo-ordinate therefore the same road
           speedLimit = roads.at(i)->getSpeedLimit();
       }
@@ -76,3 +76,4 @@ void Behaviour::increaseSpeed(Vehicle *car,vector<Layout *> roads){
   car->setSpeed(newSpeed); //giving car new speed
 
 }
+
