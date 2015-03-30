@@ -21,7 +21,7 @@ bool Behaviour :: scanYourSide(std::vector<Vehicle*> cars , Layout *road , Vehic
   int myCarY = car->GetY();
   int myCarSpeed = car->getSpeed();
   int closestCar = 1000000;
-  int theirSpeed;
+  int theirSpeed = 0;
   double driverAggression = car->getAggression();
   int speedLimit = road->getSpeedLimit();
 
