@@ -26,19 +26,38 @@ GUI::GUI(void)
 	// add layout
 	// add vehicles and layout to drawable object vector
 	// will move this code to inside the main loop in future itterations to accomidate button clicks
-	road1 = new Layout(main_Renderer, "roadEdit.png", 0, 175, 700, 75, 50);
-	car1 = new Vehicle(main_Renderer, "carRedLeft.png", 645, 213, 55, 35, 20, 1.2); 
-	car2 = new Vehicle(main_Renderer, "carRedRight.png", 0, 175, 55, 35, 20, 1.2); 
-	
-	drawables.push_back(road1);
-	drawables.push_back(car1);
-	drawables.push_back(car2);
-	
+	//road1 = new Layout(main_Renderer, "roadEdit.png", 0, 175, 700, 75, 50);
+	//car1 = new Vehicle(main_Renderer, "carRedLeft.png", 645, 213, 55, 35, 20, 1.2, "West"); 
+	//car2 = new Vehicle(main_Renderer, "carRedRight.png", 0, 175, 55, 35, 20, 1.2, "East"); 
 
-	vehicles.push_back(car1);
-	vehicles.push_back(car2);
+	Vehicle *  v1 = new Vehicle(main_Renderer, "carRedLeft.png",50,50,2,2,50,2.0,"East");  //Speed Aggressiveness x y w h direction
+	Vehicle * v2 = new Vehicle(main_Renderer, "carRedLeft.png",70,50,2,2,100,0.2,"East");
+	Vehicle * v3 = new Vehicle(main_Renderer, "carRedLeft.png",80,50,2,2,50,2.0,"East");  //Distance between v3 and v1 = 10 which is 5 car lengths ahead
+	Layout * l1 = new Layout (main_Renderer, "roadEdit.png",50,50,30,1000,100); //x y w h speedlimit
 
-	roads.push_back(road1);
+
+	//Layout * l1 = new Layout (main_Renderer, "roadEdit.png",50,50,30,1000,100); //x y w h speedlimit
+	//Vehicle * v1 = new Vehicle(main_Renderer, "carRedLeft.png",50,50,2,2,50,2.0,"South");  //Speed Aggressiveness x y w h direction
+	//Vehicle * v2 = new Vehicle(main_Renderer, "carRedLeft.png",50,70,2,2,100,0.2,"South");
+	//Vehicle * v3 = new Vehicle(main_Renderer, "carRedLeft.png",50,80,2,2,50,2.0,"South");
+	
+	//drawables.push_back(road1);
+	//drawables.push_back(car1);
+	//drawables.push_back(car2);
+	
+	drawables.push_back(l1);
+	drawables.push_back(v1);
+	drawables.push_back(v2);
+	drawables.push_back(v3);
+
+	//vehicles.push_back(car1);
+	//vehicles.push_back(car2);
+	vehicles.push_back(v1);
+	vehicles.push_back(v2);
+	vehicles.push_back(v3);
+
+	//roads.push_back(road1);
+	roads.push_back(l1);
 
 	MainLoop();
 }
@@ -65,40 +84,39 @@ void GUI::MainLoop()
 {
 
 	while(!quit_Loop && main_Event->type != SDL_QUIT) {
-		SDL_PollEvent(main_Event);
-		SDL_RenderClear(main_Renderer);
 
+		displayImages();
 
 		//if(main_Event->type == ) {
 			//add vehicles
 		//}//buttonClicked
 
-		// TODO:: loop code such as draw goes in this space
-		for(std::vector<Drawable*>::iterator i = drawables.begin(); i != drawables.end(); ++i) {
-			(*i)->Draw();
-		}
 
-		//logic = new Logic (arguments);
-		while(!quit_Simulation) {
+		while(!quit_Simulation && main_Event->type != SDL_QUIT) {
 			logic = new Logic(vehicles, roads);
 			logic->scan();
 
+			displayImages();
 
-			//if(main_Event->type == ) {
-			//buttonClicked to stop simulation
-		//}//buttonClicked
-			quit_Simulation = true;
-
+			// this call will kill the simulation if the no of vehicals is 0
+			quit_Simulation = logic->simulationOver();
+			//quit_Simulation = true;
 		}
 
-
-
-		SDL_RenderPresent(main_Renderer);
 	}
 
 }
 
-bool GUI::stopButtonPressed()
+void GUI::displayImages()
 {
-	return quit_Simulation;
+	
+	SDL_PollEvent(main_Event);
+	SDL_RenderClear(main_Renderer);
+
+	for(std::vector<Drawable*>::iterator i = drawables.begin(); i != drawables.end(); ++i) {
+				(*i)->Draw();
+	}
+
+	SDL_RenderPresent(main_Renderer);
 }
+

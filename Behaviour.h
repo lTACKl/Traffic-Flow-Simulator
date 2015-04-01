@@ -27,4 +27,3 @@ private:
 
 
 #endif // BEHAVIOUR_H
-

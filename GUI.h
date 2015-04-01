@@ -14,7 +14,6 @@ public:
 
 	SDL_Renderer *Get_Renderer(void);
 	SDL_Event *Get_Main_Event(void);
-	bool stopButtonPressed();
 
 private:
 	// requirements to open window
@@ -28,6 +27,7 @@ private:
 
 	// main loop call
 	void MainLoop();
+	void displayImages();
 
 	// hardcoding in vairables for first itteration
 	Vehicle *car1;

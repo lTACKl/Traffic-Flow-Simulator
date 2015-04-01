@@ -8,6 +8,7 @@ class Logic {
 private:
 vector<Vehicle*> cars;
 vector<Layout*> roads;
+bool stop;
 
 public:
     Logic();
@@ -18,6 +19,7 @@ public:
     vector<Layout*> getRoads();
     void setRoads(vector<Layout*> roads);
     void scan();
+	bool simulationOver();
 
    // int recordAverageSpeed(Vehicle vehicle);
 };

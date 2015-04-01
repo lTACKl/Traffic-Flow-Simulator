@@ -148,11 +148,11 @@ void Behaviour::setNewCoOrdiantes(Vehicle * car, string inc_dec, int newSpeed){/
 
    // if(inc_dec == "Increase"){
         if(direction == "North"){    //Going north therefore we increase y axis
-            car->SetY(carY + newSpeed/20);
+            car->SetY(carY - newSpeed/20);
         }
         if(direction == "South")   //Going south there fore we decrease y axis
         {
-             car->SetY(carY - newSpeed/20);
+             car->SetY(carY + newSpeed/20);
         }
         if(direction == "East")
         {
