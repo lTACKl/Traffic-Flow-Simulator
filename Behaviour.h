@@ -4,6 +4,9 @@
 #include <vector>
 #include "Vehicle.h"
 #include "Layout.h"
+#include <string>
+
+using namespace std;
 
 class Behaviour
 {

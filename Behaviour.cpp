@@ -18,8 +18,8 @@ Behaviour::~Behaviour()
 bool Behaviour :: scanYourSide(std::vector<Vehicle*> cars , Layout *road , Vehicle * car){ //Iteration 1 Speed up and Slow Down, This method will change throughout iterations to handle overtake
   bool decision = false;
   string direction = car->getDirection();
-  int myCarX = car->getx();
-  int myCarY = car->gety();
+  int myCarX = car->GetX();
+  int myCarY = car->GetY();
   int myCarSpeed = car->getSpeed();
   int closestCar = 1000000;
   int theirSpeed = 0;
@@ -29,8 +29,8 @@ bool Behaviour :: scanYourSide(std::vector<Vehicle*> cars , Layout *road , Vehic
 
 
    for(int i=0; i< cars.size(); i++){
-      int theirCarX = cars.at(i)->getx();
-      int theirCarY = cars.at(i)->gety();
+      int theirCarX = cars.at(i)->GetX();
+      int theirCarY = cars.at(i)->GetY();
       if(direction == "North" || direction == "South"){  //We check X co-ordinates when they are going north or south an Y vica versa
 
       if(((theirCarX == myCarX) && (theirCarY > myCarY)) && (theirCarY < closestCar)){  //This means The Car is on the same road and they are infront but not directly therefore we must find if it is the car directly infront of you
@@ -122,11 +122,11 @@ void Behaviour::increaseSpeed(Vehicle *car,vector<Layout *> roads){
 
 
 bool Behaviour::isOnThisRoad(Vehicle *car, Layout *road){
-    int carX = car->getx();
-    int carY = car->gety();
+    int carX = car->GetX();
+    int carY = car->GetY();
     string direction = car->getDirection();
-    int roadPositionX = road->getx();
-    int roadPositionY = road->gety();
+    int roadPositionX = road->GetX();
+    int roadPositionY = road->GetY();
 
     if(roadPositionX == carX && (direction == "North" || direction =="South")){  //We are on the same X xo-ordinate therefore the same road
         return true;
@@ -142,25 +142,25 @@ bool Behaviour::isOnThisRoad(Vehicle *car, Layout *road){
 
 void Behaviour::setNewCoOrdiantes(Vehicle * car, string inc_dec, int newSpeed){//Addes this as there was duplication of code
     string direction = car->getDirection();
-    int carX = car->getx();
-    int carY = car->gety();
+    int carX = car->GetX();
+    int carY = car->GetY();
 
 
    // if(inc_dec == "Increase"){
         if(direction == "North"){    //Going north therefore we increase y axis
-            car->setY(carY + newSpeed/20);
+            car->SetY(carY + newSpeed/20);
         }
         if(direction == "South")   //Going south there fore we decrease y axis
         {
-             car->setY(carY - newSpeed/20);
+             car->SetY(carY - newSpeed/20);
         }
         if(direction == "East")
         {
-             car->setX(carX + newSpeed/20);
+             car->SetX(carX + newSpeed/20);
         }
         if(direction == "West")
         {
-             car->setX(carX - newSpeed/20);
+             car->SetX(carX - newSpeed/20);
         }
   //  }
    /* if(inc_dec == "Decrease"){
