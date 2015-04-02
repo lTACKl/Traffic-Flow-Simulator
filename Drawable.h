@@ -22,6 +22,10 @@ protected:
 	SDL_Rect rect;
 	SDL_Texture *image;
 
+	int x;
+	int y;
+	int w;
+	int h;
 	
 };
 

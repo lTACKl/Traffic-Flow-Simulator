@@ -1,10 +1,9 @@
 #include "stdafx.h"
 #include "Drawable.h"
 
-
-
 Drawable::Drawable(void)
 {
+
 }
 
 
@@ -18,6 +17,11 @@ Drawable::Drawable(SDL_Renderer *passed_Renderer, std::string filePath, int x, i
 	if(image == NULL) {
 		std::cout << "Could not load " << filePath.c_str() << std::endl;
 	}
+
+	this->x = x;
+	this->y = y;
+	this->w = w;
+	this->h = h;
 
 	rect.x = x;
 	rect.y = y;
