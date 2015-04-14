@@ -9,7 +9,7 @@ class Layout : public Drawable{
 		
 	public:
 		Layout(void);
-		Layout(SDL_Renderer *passed_Renderer, std::string filePath, int speedLimit, int x, int y, int w, int h);
+		Layout(SDL_Renderer *passed_Renderer, std::string filePath, int x, int y, int w, int h, int speedLimit);
 		~Layout(void);
 
 		void setSpeedLimit(int speedLimit);	
