@@ -25,6 +25,10 @@ public:
 	bool oppositeDirection(Vehicle *myCar,Vehicle *car,Layout *road);
 	bool areCarsOnOppositeSide(vector<Vehicle*> cars, Vehicle *car);
 	bool foundCarInFront(std::vector<Vehicle*> cars , Layout *road , Vehicle * car);
+	bool canMoveIn(vector<Vehicle*> cars, Vehicle *car);
+	bool carsGonePast(vector<Vehicle*> cars, Vehicle *car);
+	bool carInFront(vector<Vehicle*> cars, Vehicle *car);
+
 private:
 	int leftHandSideOfRoad;
 	int rightHandSideOfRoad;
