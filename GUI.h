@@ -5,15 +5,40 @@
 #include "Vehicle.h"
 #include "Layout.h"
 #include "Logic.h"
+#include "ButtonObject.h"
+#include "GUIStates.h"
+#include <sstream>
+#include "Report.h"
+
 
 class GUI
 {
+	friend class AbstractState;
 public:
 	GUI(void);
 	~GUI(void);
 
 	SDL_Renderer *Get_Renderer(void);
 	SDL_Event *Get_Main_Event(void);
+	std::vector<Vehicle*>& getVehicles();
+	std::vector<Layout*>& getRoads();
+	void handleEvents();
+	void setRunSimulation(bool rSim);
+	void sortDrawables();
+
+	// State behaviour
+
+	void addRoad();
+	void addVehicle();
+	void runSimulation();
+	void stopSimulation();
+	void viewReport();
+
+	// Report
+	void showMessage(const char* c);
+	void showReport(const char* c);
+
+
 
 private:
 	// requirements to open window
@@ -23,7 +48,7 @@ private:
 
 	// requirements to keep system loop open
 	bool quit_Loop;
-	bool quit_Simulation;
+	bool run_Simulation;
 
 	// main loop call
 	void MainLoop();
@@ -46,6 +71,27 @@ private:
 
 	// storage for all Layout Objects
 	std::vector<Layout*> roads;
+
+	// Buttons
+	ButtonObject *roadButton;
+	ButtonObject *vehicleButton;
+	ButtonObject *runButton;
+	ButtonObject *stopButton;
+	ButtonObject *reportButton;
+
+	int mousePointX;
+	int mousePointY;
+	int last_Time_Checked;
+
+	// State behaviour
+	AbstractState *mState;
+
+	// Report
+
+	string textMessage;
+
+	Report *reportObj;
+
 
 };
 

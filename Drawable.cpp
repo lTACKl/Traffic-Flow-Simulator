@@ -62,3 +62,11 @@ int Drawable::GetY()
 {
 	return rect.y;
 }
+int Drawable::GetW()
+{
+	return rect.w;
+}
+int Drawable::GetH()
+{
+	return rect.h;
+}

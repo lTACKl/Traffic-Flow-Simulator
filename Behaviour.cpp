@@ -36,7 +36,7 @@ bool Behaviour :: scanYourSide(std::vector<Vehicle*> cars , Layout *road , Vehic
 
       if(((theirCarX == myCarX) && (theirCarY < myCarY)) && (theirCarY > closestCarB)){  //This means The Car is on the same road and they are infront but not directly therefore we must find if it is the car directly infront of you
           theirSpeed =  cars.at(i)->getSpeed();
-          closestCar = theirCarY; //at the end of the for loop we will have the closest car as it will be the lowest Y co-ordinate that is bigger than yours
+          closestCarB = theirCarY; //at the end of the for loop we will have the closest car as it will be the lowest Y co-ordinate that is bigger than yours
           foundCar = true;
 		  cout << "FOUND CAR" << endl;
           }
@@ -46,7 +46,10 @@ bool Behaviour :: scanYourSide(std::vector<Vehicle*> cars , Layout *road , Vehic
           theirSpeed =  cars.at(i)->getSpeed();
           closestCar = theirCarY; //at the end of the for loop we will have the closest car as it will be the lowest Y co-ordinate that is bigger than yours
           foundCar = true;
+<<<<<<< HEAD
+=======
 		  cout << "FOUND CAR" << endl;
+>>>>>>> origin/master
           }
 
 	  }
@@ -59,18 +62,28 @@ bool Behaviour :: scanYourSide(std::vector<Vehicle*> cars , Layout *road , Vehic
               }
       }
    }
+         if(myCarX == middleForOvertaking && canMoveIn(cars, car)){
+			car->SetX(leftHandSideOfRoad);
 
+<<<<<<< HEAD
+=======
          if(myCarX == middleForOvertaking && canMoveIn(cars, car)){
 			car->SetX(60);
 
+>>>>>>> origin/master
 		 }
 
          int distance;
-         cout<<"\nClosest Car is at Y position"<<closestCar<<"\n";
+
 		 //fix
          if(direction == "North" && foundCar == true){
+<<<<<<< HEAD
+          distance = myCarY - closestCarB ; //MycarY will be bigger if going north theredore we subtract   //Distance Found between cars 2 is the height of a car so 4 should be enough to overtake as long as the car infront of the next car is more than 2 ahead
+                                                                //Nothing is found in front                                          Over 1.5 will break the speed limit
+=======
           distance = myCarY - closestCar ; //MycarY will be bigger if going north theredore we subtract   //Distance Found between cars 2 is the height of a car so 4 should be enough to overtake as long as the car infront of the next car is more than 2 ahead
           cout <<"\nDistance between car infront of you is:"<<distance<<"\n";                                                                  //Nothing is found in front                                          Over 1.5 will break the speed limit
+>>>>>>> origin/master
          }
 		 else if(direction == "South" && foundCar == true){
 			 distance = closestCar - myCarY; 
@@ -79,20 +92,29 @@ bool Behaviour :: scanYourSide(std::vector<Vehicle*> cars , Layout *road , Vehic
 		  //BUF FOUND IF IF ELSE< NO IF ELSE
          else if((direction == "East" || direction == "West") && foundCar == true){
           distance = closestCar - myCarX; //Distance Found between cars 2 is the height of a car so 4 should be enough to overtake as long as the car infront of the next car is more than 2 ahead
-          cout <<"\nDistance between car infront of you is:"<<distance<<"\n";                                                                  //Nothing is found in front                                          Over 1.5 will break the speed limit
+                                                                 //Nothing is found in front                                          Over 1.5 will break the speed limit
          }
 
          else{
              distance = 1000000;
          }
 		                    //|| ((closestCar == 1000000 && myCarSpeed < speedLimit))                                                                                                              //NB MAY TAKE OUT
+<<<<<<< HEAD
+          if(((distance > 10) && (theirSpeed > myCarSpeed)) || distance >50 || (((closestCar == 1000000 && direction == "South")||(closestCarB == -1000000 && direction == "North")) && driverAggression> 1.5)){ //Next car is far  away and moving therefore we can speed up for the time being or else the car is really far away therefore we can speed up for the time being, needs to be far ahead beause we dont want to accelerate too fast and end up rear ending them if they break
+
+=======
           if(((distance > 10) && (theirSpeed > myCarSpeed)) || distance >50 || (((closestCar == 1000000 && direction == "South")||(closestCar == -1000000 && direction == "North")) && driverAggression> 1.5)){ //Next car is far  away and moving therefore we can speed up for the time being or else the car is really far away therefore we can speed up for the time being, needs to be far ahead beause we dont want to accelerate too fast and end up rear ending them if they break
           cout << "True returned";
+>>>>>>> origin/master
 			  return true;   //should increase speed
           }
 
           else{ //Next Car is too close, need to add in if car infront is slowing down then so do you i.e car in fronts speed is less than yours
+<<<<<<< HEAD
+
+=======
               cout << "false returned";
+>>>>>>> origin/master
 			  return false;
           }
 
@@ -128,7 +150,7 @@ void Behaviour::increaseSpeed(Vehicle *car,vector<Layout *> roads){
      bool onRoad = isOnThisRoad(car,roads.at(i));
      if(onRoad){
          speedLimit = roads.at(i)->getSpeedLimit();
-       //  cout << speedLimit;
+
          break;
      }
 
@@ -136,7 +158,7 @@ void Behaviour::increaseSpeed(Vehicle *car,vector<Layout *> roads){
 
   //all relative to sppedlimit
   int newSpeed =(carSpeed) + ((speedLimit /carSpeed) * (driverAggression)) * 8;  //High increases when aggression is high low increas when aggression is low
-  cout << "NEW SPEED " << newSpeed << endl;
+
   car->setSpeed(newSpeed); //giving car new speed
   setNewCoOrdiantes(car,"Increase",newSpeed);
 }
@@ -153,17 +175,17 @@ bool Behaviour::isOnThisRoad(Vehicle *car, Layout *road){
 	int roadHeight = road->GetH();
 
 	//x coordiate to width / 2 is the left side of the road
-	leftHandSideOfRoad = roadPositionX + (roadWidth/2) -10; //gets x and adds width divided by 2 to get the left most side of the road, maybe -10 to leave yellow lines in the missle
+	leftHandSideOfRoad = 10; //gets x and adds width divided by 2 to get the left most side of the road, maybe -10 to leave yellow lines in the missle
 	rightHandSideOfRoad = roadPositionX + roadWidth; // this is the further most right part of the road
-	middleForOvertaking = roadPositionX + (roadWidth/2) +10; //Leaves 20 in the middle for overtaking
+	middleForOvertaking = roadPositionX + (roadWidth/2); //Leaves 20 in the middle for overtaking
 	//North traffic on left hand side and South right hand side of road
-    if((carX < leftHandSideOfRoad && (direction == "North")) ||  ((carX > middleForOvertaking && carX <=rightHandSideOfRoad) && direction =="South") || (carX == middleForOvertaking)){  //We are on the same X xo-ordinate therefore the same road
+    if((carX <= leftHandSideOfRoad && (direction == "North")) ||  ((carX > middleForOvertaking && carX <=rightHandSideOfRoad) && direction =="South") || (carX == middleForOvertaking)){  //We are on the same X xo-ordinate therefore the same road
         return true;
     }
    // if(roadPositionY == carY && (direction == "East" || direction =="West")){  //We are on the same Y Co-ordiante
    //     return true;
    // }
-    return false;
+    return true;
 
 }
 
@@ -173,13 +195,25 @@ void Behaviour::setNewCoOrdiantes(Vehicle * car, string inc_dec, int newSpeed){/
     string direction = car->getDirection();
     int carX = car->GetX();
     int carY = car->GetY();
+<<<<<<< HEAD
+	int newY;
+=======
 
+>>>>>>> origin/master
         if(direction == "North"){    //Going north therefore we increase y axis
-            car->SetY(carY - newSpeed/20);
+			newY = carY - newSpeed/20;
+			if(newY <= 0){
+				newY =860;
+			}
+            car->SetY(newY);
         }
         if(direction == "South")   //Going south there fore we decrease y axis
         {
-             car->SetY(carY + newSpeed/20);
+             newY = carY + newSpeed/20;
+			if(newY >= 860){
+				newY =0;
+			}
+            car->SetY(newY);
         }
         if(direction == "East")
         {
@@ -208,7 +242,11 @@ if(areCarsOnOppositeSide(cars,car) == false || carsGonePast(cars,car)){
 		if(oppositeDirection(car,cars.at(i),road)){ //Found car on the other side of the road, check every car and see how close they are or if empty then go
 			if(cars.at(i)->getDirection() == "North" ){
 				int distance = cars.at(i)->GetY() - car->GetY() ; // Positive number indicates it is closer to the top of the screen as SDL x & y axis start at the top left corner of the screen at (0,0)
+<<<<<<< HEAD
+				if((distance > 200 && car->getAggression() >1.0) || (distance > 100 && car->getAggression() >1.5)){//Only drivers with aggression above one will overtake
+=======
 				if((distance > 200 && car->getAggression() >1.0) || (distance > 50 && car->getAggression() >1.5)){//Only drivers with aggression above one will overtake
+>>>>>>> origin/master
 					decision = true;
 				}
 				else{
@@ -217,8 +255,13 @@ if(areCarsOnOppositeSide(cars,car) == false || carsGonePast(cars,car)){
 			}
 			    if(cars.at(i)->getDirection() == "South" ){
 				int distance = car->GetY() - cars.at(i)->GetY() ; // Positive number indicates it is closer to the top of the screen as SDL x & y axis start at the top left corner of the screen at (0,0)
+<<<<<<< HEAD
+
+				if((distance > 200 && car->getAggression() >1.0) || (distance > 100 && car->getAggression() >1.5)){//Only drivers with aggression above one will overtake
+=======
 				cout <<"DISTANCE OVERTAKE" << distance << endl;
 				if((distance > 200 && car->getAggression() >1.0) || (distance > 50 && car->getAggression() >1.5)){//Only drivers with aggression above one will overtake
+>>>>>>> origin/master
 					decision = true;
 				}
 				else{
@@ -245,12 +288,15 @@ void Behaviour::overTake(vector<Vehicle*> cars, Vehicle *car, Layout *road){
 	int getRoadX = road->GetX();
 	int getRoadY = road->GetY();
 	string x ="";
-	cout << car->GetX() <<endl;
+
 	if(car->getDirection() == "North" || car->getDirection() == "South"){
 	car->SetX(middleForOvertaking);
+<<<<<<< HEAD
+=======
 	//cout << car->GetX() <<endl;
 	//car->setSpeed(100);
 	//setNewCoOrdiantes(car,x,100);
+>>>>>>> origin/master
 	
 	}
 	else{
@@ -264,10 +310,17 @@ void Behaviour::overTake(vector<Vehicle*> cars, Vehicle *car, Layout *road){
 // This method checks if the car is on the same road and it is travelling in the opposite direction
 bool Behaviour:: oppositeDirection(Vehicle *myCar,Vehicle *car,Layout *road){ 
 	if(isOnThisRoad(car,road)){
+<<<<<<< HEAD
+
+		if((myCar->getDirection() == "North" && car->getDirection() == "South") || (myCar->getDirection() == "South" && car->getDirection() == "North")
+			|| (myCar->getDirection() == "East" && car->getDirection() == "West") || (myCar->getDirection() == "West" && car->getDirection() == "East")){
+
+=======
 		cout << myCar->getDirection() << "  " << car->getDirection() << endl;
 		if((myCar->getDirection() == "North" && car->getDirection() == "South") || (myCar->getDirection() == "South" && car->getDirection() == "North")
 			|| (myCar->getDirection() == "East" && car->getDirection() == "West") || (myCar->getDirection() == "West" && car->getDirection() == "East")){
 			cout << "OPPOSITE DIRECTION " << endl;
+>>>>>>> origin/master
 			return true;
 		}
 	}
@@ -305,6 +358,10 @@ bool Behaviour:: carsGonePast(vector<Vehicle*> cars, Vehicle *car){
 
 //Checks if car overtaking can has passed out car in front and can move in
 bool Behaviour:: canMoveIn(vector<Vehicle*> cars, Vehicle *car){
+<<<<<<< HEAD
+	
+=======
+>>>>>>> origin/master
 	string myCarsDirection = car ->getDirection();
 	int mycarX = car->GetX();
 	int myCarY = car->GetY();
@@ -313,6 +370,17 @@ bool Behaviour:: canMoveIn(vector<Vehicle*> cars, Vehicle *car){
 	for(int i=0; i<cars.size(); i++){
 		if(cars.at(i)->getDirection() == myCarsDirection){//Only check cars going in the same direction i.e on same road
 			int carHeight = cars.at(i)->GetH();
+<<<<<<< HEAD
+			
+			int carX = cars.at(i)->GetX();
+			int carY = cars.at(i)->GetY();
+			 //- for north + for south
+			if((myCarsDirection == "North" && ((carY - 100) < myCarY)) && carY != myCarY){
+
+				return false;
+			}
+			if(myCarsDirection == "South" && (carY > myCarY) && carY != myCarY){
+=======
 			int carY = cars.at(i)->GetX();
 			int carX = cars.at(i)->GetY();
 			 //- for north + for south
@@ -320,11 +388,16 @@ bool Behaviour:: canMoveIn(vector<Vehicle*> cars, Vehicle *car){
 				return false;
 			}
 			if(myCarsDirection == "South" && (carY > myCarY)){
+>>>>>>> origin/master
 				return false;
 			}
 
 		}
 	}
+<<<<<<< HEAD
+	
+=======
+>>>>>>> origin/master
 	return true; //only return true when we have scanned through all the cars and found out no car has a greater y coordinate
 }
 

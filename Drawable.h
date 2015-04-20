@@ -13,6 +13,8 @@ public:
 
 	int GetX();
 	int GetY();
+	int GetW();
+	int GetH();
 
 private:
 	SDL_Renderer *main_Renderer;

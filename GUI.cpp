@@ -1,14 +1,14 @@
 #include "GUI.h"
 
 
-GUI::GUI(void)
+GUI::GUI(void) : mState(new Setup()) //State behaviour, on start up state is set to Setup()
 {
 	SDL_Init(SDL_INIT_VIDEO);
 	quit_Loop = false;
-	quit_Simulation = false;
+	run_Simulation = false;
 	//create main window, set pointer to null then values 
 	main_Window = NULL;
-	main_Window = SDL_CreateWindow("Traffic Flow Simulator", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 700, 500, SDL_WINDOW_SHOWN);
+	main_Window = SDL_CreateWindow("Traffic Flow Simulator", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1200, 900, SDL_WINDOW_SHOWN);
 
 	if(main_Window == NULL) {
 		std::cout << "Window could not be created" << std::endl;
@@ -20,44 +20,24 @@ GUI::GUI(void)
 	main_Renderer = SDL_CreateRenderer(main_Window, -1, SDL_RENDERER_ACCELERATED);
 	main_Event = new SDL_Event();
 
+	last_Time_Checked = SDL_GetTicks();
+		
+
+	roadButton = NULL;
+	vehicleButton = NULL;
+	runButton = NULL;
+	stopButton = NULL;
+	reportButton = NULL;
+	int x = 950, y = 0, w = 227, h = 40;
+	roadButton = new ButtonObject(main_Renderer, "AddARoadBtn.png", x , 50 , w , h);
+	vehicleButton = new ButtonObject(main_Renderer, "AddAVehicleBtn.png", x , 150 , w , h);
+	runButton = new ButtonObject(main_Renderer, "RunSimulationBtn.png", x , 250 , w , h);
+	stopButton = new ButtonObject(main_Renderer, "StopSimulationBtn.png", x , 350 , w , h);
+	reportButton = new ButtonObject(main_Renderer, "ViewReportBtn.png", x , 450 , w , h);
+
 	
-	// add vehicles
-	// put them in a vector
-	// add layout
-	// add vehicles and layout to drawable object vector
-	// will move this code to inside the main loop in future itterations to accomidate button clicks
-	//road1 = new Layout(main_Renderer, "roadEdit.png", 0, 175, 700, 75, 50);
-	//car1 = new Vehicle(main_Renderer, "carRedLeft.png", 645, 213, 55, 35, 20, 1.2, "West"); 
-	//car2 = new Vehicle(main_Renderer, "carRedRight.png", 0, 175, 55, 35, 20, 1.2, "East"); 
-
-	Vehicle *  v1 = new Vehicle(main_Renderer, "carRedLeft.png",50,50,2,2,50,2.0,"East");  //Speed Aggressiveness x y w h direction
-	Vehicle * v2 = new Vehicle(main_Renderer, "carRedLeft.png",70,50,2,2,100,0.2,"East");
-	Vehicle * v3 = new Vehicle(main_Renderer, "carRedLeft.png",80,50,2,2,50,2.0,"East");  //Distance between v3 and v1 = 10 which is 5 car lengths ahead
-	Layout * l1 = new Layout (main_Renderer, "roadEdit.png",50,50,30,1000,100); //x y w h speedlimit
-
-
-	//Layout * l1 = new Layout (main_Renderer, "roadEdit.png",50,50,30,1000,100); //x y w h speedlimit
-	//Vehicle * v1 = new Vehicle(main_Renderer, "carRedLeft.png",50,50,2,2,50,2.0,"South");  //Speed Aggressiveness x y w h direction
-	//Vehicle * v2 = new Vehicle(main_Renderer, "carRedLeft.png",50,70,2,2,100,0.2,"South");
-	//Vehicle * v3 = new Vehicle(main_Renderer, "carRedLeft.png",50,80,2,2,50,2.0,"South");
-	
-	//drawables.push_back(road1);
-	//drawables.push_back(car1);
-	//drawables.push_back(car2);
-	
-	drawables.push_back(l1);
-	drawables.push_back(v1);
-	drawables.push_back(v2);
-	drawables.push_back(v3);
-
-	//vehicles.push_back(car1);
-	//vehicles.push_back(car2);
-	vehicles.push_back(v1);
-	vehicles.push_back(v2);
-	vehicles.push_back(v3);
-
-	//roads.push_back(road1);
-	roads.push_back(l1);
+	// initilise report
+	reportObj = new Report();
 
 	MainLoop();
 }
@@ -66,6 +46,7 @@ GUI::GUI(void)
 GUI::~GUI(void)
 {
 	delete main_Event;
+	delete mState;
 	SDL_DestroyWindow(main_Window);
 	SDL_DestroyRenderer(main_Renderer);
 	SDL_Quit();
@@ -84,23 +65,24 @@ void GUI::MainLoop()
 {
 
 	while(!quit_Loop && main_Event->type != SDL_QUIT) {
-
+		//last_Time_Checked = SDL_GetTicks();
 		displayImages();
 
-		//if(main_Event->type == ) {
-			//add vehicles
-		//}//buttonClicked
+		while(run_Simulation && main_Event->type != SDL_QUIT) {
+			if ( (last_Time_Checked + 25) < SDL_GetTicks()) {
+				logic = new Logic(vehicles, roads);
+				logic->scan();
+				//last_Time_Checked = SDL_GetTicks();
+				displayImages();
 
-
-		while(!quit_Simulation && main_Event->type != SDL_QUIT) {
-			logic = new Logic(vehicles, roads);
-			logic->scan();
-
-			displayImages();
-
-			// this call will kill the simulation if the no of vehicals is 0
-			quit_Simulation = logic->simulationOver();
-			//quit_Simulation = true;
+				// this call will kill the simulation if the no of vehicals is 0
+				// need to change the state here
+				if(logic->simulationOver()) {
+					run_Simulation = !logic->simulationOver();
+				}
+				//quit_Simulation = true;
+				last_Time_Checked = SDL_GetTicks();
+			}
 		}
 
 	}
@@ -109,14 +91,126 @@ void GUI::MainLoop()
 
 void GUI::displayImages()
 {
-	
-	SDL_PollEvent(main_Event);
+
+	if( SDL_PollEvent( main_Event ) )
+    {
+          //Handle button events
+          handleEvents();
+    }
+
 	SDL_RenderClear(main_Renderer);
+	sortDrawables();
 
 	for(std::vector<Drawable*>::iterator i = drawables.begin(); i != drawables.end(); ++i) {
 				(*i)->Draw();
 	}
-
+	
 	SDL_RenderPresent(main_Renderer);
+
 }
 
+std::vector<Vehicle*>& GUI::getVehicles()
+{
+	return vehicles;
+}
+std::vector<Layout*>& GUI::getRoads()
+{
+	return roads;
+}
+
+void GUI::handleEvents()
+{
+	//buttonClicked
+		if(main_Event->type == SDL_MOUSEBUTTONDOWN ) {
+			// this will read left mouse clicks
+			if(main_Event->button.button == SDL_BUTTON_LEFT) {
+				//add vehicles
+				// this gets the mouse point at a given time, In this case, when the left mouse button is clicked
+				mousePointX = main_Event->button.x;
+				mousePointY = main_Event->button.y;
+				if(roadButton->posOverButton(mousePointX,mousePointY)) {
+					// add a road button was pressed
+					addRoad();
+				}
+				if(vehicleButton->posOverButton(mousePointX,mousePointY)) {
+					// add a vehicle button was pressed
+					addVehicle();
+				}
+				if(runButton->posOverButton(mousePointX,mousePointY)) {
+					// run simulation button was pressed
+					runSimulation();
+				}
+				if(stopButton->posOverButton(mousePointX,mousePointY)) {
+					// stop simulation button was pressed
+					stopSimulation();
+				}
+				if(reportButton->posOverButton(mousePointX,mousePointY)) {
+					// report button was pressed
+					viewReport();
+				}
+			}
+		}
+
+}
+
+void GUI::setRunSimulation(bool rSim)
+{
+	run_Simulation = rSim;
+}
+
+void GUI::sortDrawables()
+{
+	drawables.clear();
+
+	for(std::vector<Layout*>::iterator i = roads.begin(); i != roads.end(); ++i) {
+		drawables.push_back((*i));
+	}
+	for(std::vector<Vehicle*>::iterator i = vehicles.begin(); i != vehicles.end(); ++i) {
+		drawables.push_back((*i));
+	}
+	//Add buttons to drawables list
+	drawables.push_back(roadButton);
+	drawables.push_back(vehicleButton);
+	drawables.push_back(runButton);
+	drawables.push_back(stopButton);
+	drawables.push_back(reportButton);
+
+}
+
+// State behaviour calls
+void GUI::addRoad()
+{
+	mState->addRoad(*this);
+}
+
+void GUI::addVehicle()
+{
+	mState->addVehicle(*this);
+}
+
+void GUI::runSimulation()
+{
+	mState->runSimulation(*this);
+}
+
+void GUI::stopSimulation()
+{
+	mState->stopSimulation(*this);
+}
+
+void GUI::viewReport()
+{
+	mState->viewReport(*this);
+}
+
+void GUI::showMessage(const char* c)	//shows the message to the screen for a frame
+{
+	reportObj->showMessage(c, main_Renderer);
+
+}
+
+void GUI::showReport(const char* c)	
+{
+	reportObj->showReport( c, main_Renderer , roads.size() , vehicles.size() );
+
+}
